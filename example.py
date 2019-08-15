@@ -1,16 +1,18 @@
 import os
 import caffe
-from collections import OrderdDict
+from collections import OrderedDict
+import numpy as np
 import sys
-import torch
 base_dir = os.getcwd()
 sys.path.append(base_dir)
 
-from DeepImageSynthesis import *
+from DeepImageSynthesis import LossFunctions
+from DeepImageSynthesis.ImageSyn import ImageSyn
+from DeepImageSynthesis.Misc import *
 
 VGGweights = os.path.join(base_dir, 'Models/vgg_normalised.caffemodel')
 VGGmodel = os.path.join(base_dir, 'Models/VGG_ave_pool_deploy.prototxt')
-imagenet_mean = array([ 0.40760392,  0.45795686,  0.48501961]) #mean for color channels (bgr)
+imagenet_mean = np.array([ 0.40760392,  0.45795686,  0.48501961]) #mean for color channels (bgr)
 im_dir = os.path.join(base_dir, 'Images/')
 gpu = 0
 caffe.set_mode_gpu() #for cpu mode do 'caffe.set_mode_cpu()'
@@ -23,7 +25,7 @@ source_img_org = caffe.io.load_image(im_dir + source_img_name)
 im_size = 256.
 [source_img, net] = load_image(im_dir + source_img_name, im_size, 
                                VGGmodel, VGGweights, imagenet_mean)
-im_size = asarray(source_img.shape[-2:])
+im_size = np.asarray(source_img.shape[-2:])
 
 
 #l-bfgs parameters optimisation
