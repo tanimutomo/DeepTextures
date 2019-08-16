@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 from DeepImageSynthesis.Misc import *
 
@@ -22,6 +22,7 @@ def ImageSyn(net, constraints, init=None, bounds=None, callback=None, minimize_o
     
      #get indices for gradient
     layers, indices = get_indices(net, constraints)
+    layers = list(layers)
     
     #function to minimise 
     def f(x):

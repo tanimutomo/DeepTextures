@@ -1,7 +1,7 @@
 import numpy as np
 import scipy
 import caffe
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from IPython.display import display,clear_output
 
 class constraint(object):
@@ -38,15 +38,15 @@ def show_progress(x, net, title=None, handle=False):
 
     disp_image = (x.reshape(*net.blobs['data'].data.shape)[0].transpose(1,2,0)[:,:,::-1]-x.min())/(x.max()-x.min())
     clear_output()
-    plt.imshow(disp_image)
-    if title != None:
-        ax = plt.gca()
-        ax.set_title(title)
-    f = plt.gcf()
-    display()
-    plt.show()    
-    if handle:
-        return f
+    # plt.imshow(disp_image)
+    # if title != None:
+    #     ax = plt.gca()
+    #     ax.set_title(title)
+    # f = plt.gcf()
+    # display()
+    # plt.show()    
+    # if handle:
+    #     return f
    
 def get_bounds(images, im_size):
     '''
@@ -170,8 +170,8 @@ def load_image(file_name, im_size, net_model, net_weights, mean, show_img=False)
     '''
 
     img = caffe.io.load_image(file_name)
-    if show_img:
-        plt.imshow(img)
+    # if show_img:
+    #     plt.imshow(img)
     if isinstance(im_size,float):
         im_scale = np.sqrt(im_size**2 /np.prod(np.asarray(img.shape[:2])))
         im_size = im_scale * np.asarray(img.shape[:2])
