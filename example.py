@@ -1,7 +1,9 @@
 import os
 import caffe
 from collections import OrderedDict
+import glob
 import numpy as np
+from PIL import Image
 import sys
 base_dir = os.getcwd()
 sys.path.append(base_dir)
@@ -20,10 +22,11 @@ caffe.set_device(gpu)
 
 
 #load source image
-source_img_name = glob.glob1(im_dir, 'pebbles.jpg')[0]
-source_img_org = caffe.io.load_image(im_dir + source_img_name)
+filename = 'pebbles.jpg'
+source_path = os.path.join(im_dir, 'input', filename)
+source_img_org = caffe.io.load_image(source_path)
 im_size = 256.
-[source_img, net] = load_image(im_dir + source_img_name, im_size, 
+[source_img, net] = load_image(source_path, im_size, 
                                VGGmodel, VGGweights, imagenet_mean)
 im_size = np.asarray(source_img.shape[-2:])
 
@@ -58,5 +61,7 @@ result = ImageSyn(net, constraints, bounds=bounds,
 #match histogram of new texture with that of the source texture and show both images
 new_texture = result['x'].reshape(*source_img.shape[1:]).transpose(1,2,0)[:,:,::-1]
 new_texture = histogram_matching(new_texture, source_img_org)
-print(new_texture.shape)
-print(source_img_org.shape)
+new_texture = (new_texture * 255).astype(np.uint8)
+print(new_texture.dtype, new_texture.min(), new_texture.max())
+save_path = os.path.join(im_dir, 'output', filename)
+Image.fromarray(new_texture).save(save_path)
