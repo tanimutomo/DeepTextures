@@ -8,6 +8,7 @@ import sys
 base_dir = os.getcwd()
 sys.path.append(base_dir)
 
+from utils import check_array
 from DeepImageSynthesis import LossFunctions
 from DeepImageSynthesis.ImageSyn import ImageSyn
 from DeepImageSynthesis.Misc import *
@@ -28,6 +29,7 @@ source_img_org = caffe.io.load_image(source_path)
 im_size = 256.
 [source_img, net] = load_image(source_path, im_size, 
                                VGGmodel, VGGweights, imagenet_mean)
+check_array(source_img, 'source_img')
 im_size = np.asarray(source_img.shape[-2:])
 
 
@@ -60,8 +62,9 @@ result = ImageSyn(net, constraints, bounds=bounds,
 
 #match histogram of new texture with that of the source texture and show both images
 new_texture = result['x'].reshape(*source_img.shape[1:]).transpose(1,2,0)[:,:,::-1]
+check_array(new_texture, 'raw new_texture')
 new_texture = histogram_matching(new_texture, source_img_org)
 new_texture = (new_texture * 255).astype(np.uint8)
-print(new_texture.dtype, new_texture.min(), new_texture.max())
+check_array(new_texture, 'saved new_texture')
 save_path = os.path.join(im_dir, 'output', filename)
 Image.fromarray(new_texture).save(save_path)
