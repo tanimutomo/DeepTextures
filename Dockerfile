@@ -1,6 +1,8 @@
-FROM tanimutomo/caffe-gpu:pytorch
+FROM yangcha/caffe-gpu-conda
 LABEL maintainer="tanimuitomo tanimutomo@gmail.com"
 
-WORKDIR /workspace
-ADD . /workspace
+RUN pip install --upgrade google-api-python-client &&\
+    conda install protobuf
 
+WORKDIR /workspace
+VOLUME /workspace
