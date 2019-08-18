@@ -3,6 +3,7 @@ import scipy
 import caffe
 # import matplotlib.pyplot as plt
 from IPython.display import display,clear_output
+from PIL import Image
 
 class constraint(object):
     '''
@@ -156,7 +157,7 @@ def histogram_matching(org_image, match_image, grey=False, n_bins=100):
         
     return matched_image
 
-def load_image(file_name, im_size, net_model, net_weights, mean, show_img=False):
+def load_image(file_name, net_model, net_weights, mean, show_img=False):
     '''
     Loads and preprocesses image into caffe format by constructing and using the appropriate network.
 
@@ -169,12 +170,21 @@ def load_image(file_name, im_size, net_model, net_weights, mean, show_img=False)
     :return: preprocessed image and caffe.Classifier object defining the network
     '''
 
-    img = caffe.io.load_image(file_name)
+    # img = caffe.io.load_image(file_name)
     # if show_img:
     #     plt.imshow(img)
-    if isinstance(im_size,float):
-        im_scale = np.sqrt(im_size**2 /np.prod(np.asarray(img.shape[:2])))
-        im_size = im_scale * np.asarray(img.shape[:2])
+    # if isinstance(im_size,float):
+    #     im_scale = np.sqrt(im_size**2 /np.prod(np.asarray(img.shape[:2])))
+    #     im_size = im_scale * np.asarray(img.shape[:2])
+
+    # transform
+    img = Image.open(file_name)
+    img = img.resize((256, 256))
+    ul, br = 128 - 112, 128 + 112
+    img = img.crop((ul, ul, br, br))
+    img = np.array(img)
+    im_size = np.array(img.shape[:2])
+    
     batchSize = 1
     with open(net_model,'r+') as f:
         data = f.readlines() 
