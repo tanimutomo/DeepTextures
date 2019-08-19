@@ -183,6 +183,8 @@ def load_image(file_name, net_model, net_weights, mean, show_img=False):
     ul, br = 128 - 112, 128 + 112
     img = img.crop((ul, ul, br, br))
     img = np.array(img)
+    if img.ndim == 2:
+        img = img[:, :, None]
     im_size = np.array(img.shape[:2])
     
     batchSize = 1
