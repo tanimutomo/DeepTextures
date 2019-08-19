@@ -4,6 +4,7 @@ import caffe
 # import matplotlib.pyplot as plt
 from IPython.display import display,clear_output
 from PIL import Image
+from utils import check_array
 
 class constraint(object):
     '''
@@ -170,9 +171,11 @@ def load_image(file_name, net_model, net_weights, mean, show_img=False):
     :return: preprocessed image and caffe.Classifier object defining the network
     '''
 
+    # im_size = 256.
     # img = caffe.io.load_image(file_name)
-    # if show_img:
-    #     plt.imshow(img)
+    # min_cimg, max_cimg = img.min(), img.max()
+    # # if show_img:
+    # #     plt.imshow(img)
     # if isinstance(im_size,float):
     #     im_scale = np.sqrt(im_size**2 /np.prod(np.asarray(img.shape[:2])))
     #     im_size = im_scale * np.asarray(img.shape[:2])
@@ -186,6 +189,9 @@ def load_image(file_name, net_model, net_weights, mean, show_img=False):
     if img.ndim == 2:
         img = img[:, :, None]
     im_size = np.array(img.shape[:2])
+
+    # normalize and convert float
+    img = img.astype(np.float32) / 255.0
     
     batchSize = 1
     with open(net_model,'r+') as f:
