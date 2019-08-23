@@ -2,8 +2,8 @@ name: "VGG_ILSVRC_19_layers"
 input: "data"
 input_dim: 1
 input_dim: 3
-input_dim: 256
-input_dim: 256
+input_dim: 224
+input_dim: 224
 force_backward: true
 layers {
   bottom: "data"
@@ -332,6 +332,10 @@ layers {
     stride: 2
   }
 }
+
+
+
+
 
 
 
